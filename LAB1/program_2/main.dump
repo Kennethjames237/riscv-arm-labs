@@ -1,0 +1,116 @@
+
+main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010094 <_start>:
+   10094:	00001097          	auipc	ra,0x1
+   10098:	14408093          	addi	ra,ra,324 # 111d8 <__DATA_BEGIN__>
+   1009c:	00008103          	lb	sp,0(ra)
+   100a0:	00001197          	auipc	gp,0x1
+   100a4:	14218193          	addi	gp,gp,322 # 111e2 <v2>
+   100a8:	00018203          	lb	tp,0(gp) # 119d8 <__global_pointer$>
+   100ac:	00001297          	auipc	t0,0x1
+   100b0:	14028293          	addi	t0,t0,320 # 111ec <v3>
+   100b4:	008004ef          	jal	s1,100bc <Compare_and_add_in_v3>
+   100b8:	1140006f          	j	101cc <End>
+
+000100bc <Compare_and_add_in_v3>:
+   100bc:	00000313          	li	t1,0
+   100c0:	00000413          	li	s0,0
+   100c4:	00000513          	li	a0,0
+   100c8:	00900393          	li	t2,9
+   100cc:	00a00593          	li	a1,10
+
+000100d0 <outerloop>:
+   100d0:	04b30463          	beq	t1,a1,10118 <Finish>
+   100d4:	00608633          	add	a2,ra,t1
+   100d8:	00060103          	lb	sp,0(a2)
+   100dc:	008186b3          	add	a3,gp,s0
+   100e0:	00068203          	lb	tp,0(a3)
+   100e4:	00410e63          	beq	sp,tp,10100 <put_in_v3>
+   100e8:	00740663          	beq	s0,t2,100f4 <set_v2_and_v1>
+   100ec:	00140413          	addi	s0,s0,1
+   100f0:	fe1ff06f          	j	100d0 <outerloop>
+
+000100f4 <set_v2_and_v1>:
+   100f4:	00000413          	li	s0,0
+   100f8:	00130313          	addi	t1,t1,1
+   100fc:	fd5ff06f          	j	100d0 <outerloop>
+
+00010100 <put_in_v3>:
+   10100:	00a28733          	add	a4,t0,a0
+   10104:	00270023          	sb	sp,0(a4)
+   10108:	00150513          	addi	a0,a0,1
+   1010c:	00000413          	li	s0,0
+   10110:	00130313          	addi	t1,t1,1
+   10114:	fbdff06f          	j	100d0 <outerloop>
+
+00010118 <Finish>:
+   10118:	00001617          	auipc	a2,0x1
+   1011c:	0de60613          	addi	a2,a2,222 # 111f6 <flag1>
+   10120:	00001697          	auipc	a3,0x1
+   10124:	0d768693          	addi	a3,a3,215 # 111f7 <flag2>
+   10128:	00001717          	auipc	a4,0x1
+   1012c:	0d070713          	addi	a4,a4,208 # 111f8 <flag3>
+   10130:	00153793          	seqz	a5,a0
+   10134:	00f60023          	sb	a5,0(a2)
+   10138:	00051463          	bnez	a0,10140 <check_flag2>
+   1013c:	08c0006f          	j	101c8 <Exit>
+
+00010140 <check_flag2>:
+   10140:	00000813          	li	a6,0
+   10144:	00100893          	li	a7,1
+
+00010148 <loop_in_v3>:
+   10148:	005809b3          	add	s3,a6,t0
+   1014c:	00098303          	lb	t1,0(s3)
+   10150:	00588a33          	add	s4,a7,t0
+   10154:	000a0903          	lb	s2,0(s4)
+   10158:	00a88a63          	beq	a7,a0,1016c <conclude_ascending>
+   1015c:	01235e63          	bge	t1,s2,10178 <check_flag3>
+   10160:	00180813          	addi	a6,a6,1
+   10164:	00188893          	addi	a7,a7,1
+   10168:	fe1ff06f          	j	10148 <loop_in_v3>
+
+0001016c <conclude_ascending>:
+   1016c:	00100793          	li	a5,1
+   10170:	00f68023          	sb	a5,0(a3)
+   10174:	0540006f          	j	101c8 <Exit>
+
+00010178 <check_flag3>:
+   10178:	00000793          	li	a5,0
+   1017c:	00f68023          	sb	a5,0(a3)
+   10180:	00000813          	li	a6,0
+   10184:	00100893          	li	a7,1
+   10188:	005809b3          	add	s3,a6,t0
+   1018c:	00098303          	lb	t1,0(s3)
+   10190:	00588a33          	add	s4,a7,t0
+   10194:	000a0903          	lb	s2,0(s4)
+   10198:	00a88a63          	beq	a7,a0,101ac <conclude_desending>
+   1019c:	02695063          	bge	s2,t1,101bc <non_of_the_cases>
+   101a0:	00180813          	addi	a6,a6,1
+   101a4:	00188893          	addi	a7,a7,1
+   101a8:	fa1ff06f          	j	10148 <loop_in_v3>
+
+000101ac <conclude_desending>:
+   101ac:	01235263          	bge	t1,s2,101b0 <finally>
+
+000101b0 <finally>:
+   101b0:	00100793          	li	a5,1
+   101b4:	00f70023          	sb	a5,0(a4)
+   101b8:	0100006f          	j	101c8 <Exit>
+
+000101bc <non_of_the_cases>:
+   101bc:	00000793          	li	a5,0
+   101c0:	00f70023          	sb	a5,0(a4)
+   101c4:	0040006f          	j	101c8 <Exit>
+
+000101c8 <Exit>:
+   101c8:	00048067          	jr	s1
+
+000101cc <End>:
+   101cc:	00000513          	li	a0,0
+   101d0:	05d00893          	li	a7,93
+   101d4:	00000073          	ecall
