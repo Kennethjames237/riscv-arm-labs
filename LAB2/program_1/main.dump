@@ -1,0 +1,56 @@
+
+main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010094 <_start>:
+   10094:	00001097          	auipc	ra,0x1
+   10098:	0a408093          	addi	ra,ra,164 # 11138 <__DATA_BEGIN__>
+   1009c:	00001117          	auipc	sp,0x1
+   100a0:	11410113          	addi	sp,sp,276 # 111b0 <w>
+   100a4:	00001197          	auipc	gp,0x1
+   100a8:	18418193          	addi	gp,gp,388 # 11228 <b>
+   100ac:	00001217          	auipc	tp,0x1
+   100b0:	18020213          	addi	tp,tp,384 # 1122c <k>
+   100b4:	0001a107          	flw	ft2,0(gp) # 11938 <__global_pointer$>
+   100b8:	00022303          	lw	t1,0(tp) # 0 <_start-0x10094>
+   100bc:	00128293          	addi	t0,t0,1
+
+000100c0 <loop>:
+   100c0:	02530263          	beq	t1,t0,100e4 <Add_bais>
+   100c4:	0000a187          	flw	ft3,0(ra)
+   100c8:	00012207          	flw	ft4,0(sp)
+   100cc:	1041f353          	fmul.s	ft6,ft3,ft4
+   100d0:	0062f2d3          	fadd.s	ft5,ft5,ft6
+   100d4:	00408093          	addi	ra,ra,4
+   100d8:	00410113          	addi	sp,sp,4
+   100dc:	00128293          	addi	t0,t0,1
+   100e0:	fe1ff06f          	j	100c0 <loop>
+
+000100e4 <Add_bais>:
+   100e4:	0001a387          	flw	ft7,0(gp) # 11938 <__global_pointer$>
+   100e8:	0072f2d3          	fadd.s	ft5,ft5,ft7
+   100ec:	00001617          	auipc	a2,0x1
+   100f0:	14460613          	addi	a2,a2,324 # 11230 <y>
+   100f4:	00062407          	flw	fs0,0(a2)
+   100f8:	a082a4d3          	feq.s	s1,ft5,fs0
+   100fc:	02031663          	bnez	t1,10128 <set_zero>
+   10100:	e00283d3          	fmv.x.w	t2,ft5
+   10104:	0173d393          	srli	t2,t2,0x17
+   10108:	0ff38393          	addi	t2,t2,255
+   1010c:	07f00493          	li	s1,127
+   10110:	00938c63          	beq	t2,s1,10128 <set_zero>
+   10114:	00001617          	auipc	a2,0x1
+   10118:	12060613          	addi	a2,a2,288 # 11234 <one>
+   1011c:	00062507          	flw	fa0,0(a2)
+   10120:	18557453          	fdiv.s	fs0,fa0,ft5
+   10124:	0080006f          	j	1012c <End>
+
+00010128 <set_zero>:
+   10128:	00047453          	fadd.s	fs0,fs0,ft0
+
+0001012c <End>:
+   1012c:	00000513          	li	a0,0
+   10130:	05d00893          	li	a7,93
+   10134:	00000073          	ecall
