@@ -1,0 +1,41 @@
+
+main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010094 <_start>:
+   10094:	00001297          	auipc	t0,0x1
+   10098:	08028293          	addi	t0,t0,128 # 11114 <g>
+   1009c:	00001317          	auipc	t1,0x1
+   100a0:	09830313          	addi	t1,t1,152 # 11134 <h>
+   100a4:	00001397          	auipc	t2,0x1
+   100a8:	0b038393          	addi	t2,t2,176 # 11154 <w>
+   100ac:	00001e17          	auipc	t3,0x1
+   100b0:	064e0e13          	addi	t3,t3,100 # 11110 <lr>
+   100b4:	000e2007          	flw	ft0,0(t3)
+   100b8:	00001e97          	auipc	t4,0x1
+   100bc:	054e8e93          	addi	t4,t4,84 # 1110c <__DATA_BEGIN__>
+   100c0:	000eaf03          	lw	t5,0(t4)
+
+000100c4 <loop>:
+   100c4:	0002a087          	flw	ft1,0(t0)
+   100c8:	00032107          	flw	ft2,0(t1)
+   100cc:	1010f1d3          	fmul.s	ft3,ft1,ft1
+   100d0:	00317153          	fadd.s	ft2,ft2,ft3
+   100d4:	00232027          	fsw	ft2,0(t1)
+   100d8:	101071d3          	fmul.s	ft3,ft0,ft1
+   100dc:	1821f1d3          	fdiv.s	ft3,ft3,ft2
+   100e0:	0003a207          	flw	ft4,0(t2)
+   100e4:	08327253          	fsub.s	ft4,ft4,ft3
+   100e8:	0043a027          	fsw	ft4,0(t2)
+   100ec:	00428293          	addi	t0,t0,4
+   100f0:	00430313          	addi	t1,t1,4
+   100f4:	00438393          	addi	t2,t2,4
+   100f8:	ffff0f13          	addi	t5,t5,-1
+   100fc:	fc0f14e3          	bnez	t5,100c4 <loop>
+
+00010100 <End>:
+   10100:	00000513          	li	a0,0
+   10104:	05d00893          	li	a7,93
+   10108:	00000073          	ecall

@@ -1,0 +1,57 @@
+
+main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010094 <_start>:
+   10094:	00001297          	auipc	t0,0x1
+   10098:	0c028293          	addi	t0,t0,192 # 11154 <g>
+   1009c:	00001317          	auipc	t1,0x1
+   100a0:	0d830313          	addi	t1,t1,216 # 11174 <h>
+   100a4:	00001397          	auipc	t2,0x1
+   100a8:	0f038393          	addi	t2,t2,240 # 11194 <w>
+   100ac:	00001e17          	auipc	t3,0x1
+   100b0:	0a4e0e13          	addi	t3,t3,164 # 11150 <lr>
+   100b4:	000e2007          	flw	ft0,0(t3)
+   100b8:	00001e97          	auipc	t4,0x1
+   100bc:	094e8e93          	addi	t4,t4,148 # 1114c <__DATA_BEGIN__>
+   100c0:	000eaf03          	lw	t5,0(t4)
+
+000100c4 <loop>:
+   100c4:	0002a087          	flw	ft1,0(t0)
+   100c8:	00428093          	addi	ra,t0,4
+   100cc:	0000a287          	flw	ft5,0(ra)
+   100d0:	00032107          	flw	ft2,0(t1)
+   100d4:	00430113          	addi	sp,t1,4
+   100d8:	00012307          	flw	ft6,0(sp)
+   100dc:	1010f1d3          	fmul.s	ft3,ft1,ft1
+   100e0:	1052f3d3          	fmul.s	ft7,ft5,ft5
+   100e4:	00317153          	fadd.s	ft2,ft2,ft3
+   100e8:	00737353          	fadd.s	ft6,ft6,ft7
+   100ec:	00232027          	fsw	ft2,0(t1)
+   100f0:	00612027          	fsw	ft6,0(sp)
+   100f4:	101071d3          	fmul.s	ft3,ft0,ft1
+   100f8:	105073d3          	fmul.s	ft7,ft0,ft5
+   100fc:	1821f1d3          	fdiv.s	ft3,ft3,ft2
+   10100:	1863f3d3          	fdiv.s	ft7,ft7,ft6
+   10104:	0003a207          	flw	ft4,0(t2)
+   10108:	00438193          	addi	gp,t2,4
+   1010c:	0001a407          	flw	fs0,0(gp) # 1194c <__global_pointer$>
+   10110:	08327253          	fsub.s	ft4,ft4,ft3
+   10114:	08747453          	fsub.s	fs0,fs0,ft7
+   10118:	0043a027          	fsw	ft4,0(t2)
+   1011c:	0081a027          	fsw	fs0,0(gp) # 1194c <__global_pointer$>
+   10120:	00428293          	addi	t0,t0,4
+   10124:	00408093          	addi	ra,ra,4
+   10128:	00430313          	addi	t1,t1,4
+   1012c:	00410113          	addi	sp,sp,4
+   10130:	00438393          	addi	t2,t2,4
+   10134:	00418193          	addi	gp,gp,4 # 11950 <__global_pointer$+0x4>
+   10138:	ffef0f13          	addi	t5,t5,-2
+   1013c:	f80f14e3          	bnez	t5,100c4 <loop>
+
+00010140 <End>:
+   10140:	00000513          	li	a0,0
+   10144:	05d00893          	li	a7,93
+   10148:	00000073          	ecall
